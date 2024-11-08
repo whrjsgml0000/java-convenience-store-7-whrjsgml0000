@@ -6,6 +6,26 @@ public class Item {
     private Integer quantity;
     private Promotion promotion;
 
+    public String getName() {
+        return name;
+    }
+
+    public Integer getPrice() {
+        return price;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public Promotion getPromotion() {
+        return promotion;
+    }
+
+    public void cell(int quantity){
+        this.quantity -= quantity;
+    }
+
     public static final class ItemBuilder {
         private String name;
         private Integer price;
