@@ -7,7 +7,7 @@ public class ErrorPrinter {
         try{
             throw new IllegalArgumentException();
         }catch (IllegalArgumentException e){
-            System.out.println(error.message());
+            System.out.println(error.error());
         }
     }
 }

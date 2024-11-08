@@ -1,7 +1,8 @@
 package store.error;
 
 public enum Input implements Error{
-
+    PURCHASE_FORM("구매 형식 입력이 잘못됐습니다."),
+    RESPONSE_FORM("응답 형식이 잘못됐습니다."),
     ;
 
 
@@ -10,7 +11,7 @@ public enum Input implements Error{
         this.message = message;
     }
 
-    public String message() {
+    public String error() {
         return message;
     }
 }

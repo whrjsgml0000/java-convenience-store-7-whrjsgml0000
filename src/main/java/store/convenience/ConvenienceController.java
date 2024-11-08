@@ -1,6 +1,6 @@
 package store.convenience;
 
-import java.util.List;
+import store.common.Response;
 import store.config.FilePath;
 import store.util.FileLoad;
 import store.view.InputView;
@@ -20,9 +20,17 @@ public class ConvenienceController {
     public void run(){
         saveLoadData();
         while(continueShopping){
-            outputView.introduction(convenienceService.getCurrentState());
-            inputView.requestNameAndQuantity();
+            shopping();
         }
+    }
+
+    private void shopping() {
+        outputView.introduction(convenienceService.getCurrentState());
+        inputView.requestNameAndQuantity();
+
+
+        if(inputView.requestContinueShopping() == Response.NO)
+            continueShopping = false;
     }
 
     private void saveLoadData(){
