@@ -23,4 +23,10 @@ public class ItemRepository {
     public List<Item> findAll(){
         return items;
     }
+
+    public List<Item> findByName(String name){
+        return items.stream()
+                .filter(item->item.getName().equals(name))
+                .toList();
+    }
 }

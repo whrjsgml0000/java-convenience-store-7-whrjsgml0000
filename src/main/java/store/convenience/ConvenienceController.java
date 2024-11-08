@@ -25,12 +25,19 @@ public class ConvenienceController {
     }
 
     private void shopping() {
-        outputView.introduction(convenienceService.getCurrentState());
-        inputView.requestNameAndQuantity();
-
+        getValidRequestNameAndQuantity();
 
         if(inputView.requestContinueShopping() == Response.NO)
             continueShopping = false;
+    }
+
+    private String getValidRequestNameAndQuantity() {
+        outputView.introduction(convenienceService.getCurrentState());
+        while(true) {
+            String nameAndQuantity = inputView.requestNameAndQuantity();
+            if(convenienceService.validNameAndQuantity(nameAndQuantity))
+                return nameAndQuantity;
+        }
     }
 
     private void saveLoadData(){

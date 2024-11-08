@@ -16,4 +16,8 @@ public class ConvenienceService {
     public List<Item> getCurrentState(){
         return itemRepository.findAll();
     }
+
+    public boolean validNameAndQuantity(String input){
+        
+    }
 }
