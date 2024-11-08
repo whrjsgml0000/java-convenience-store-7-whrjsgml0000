@@ -2,7 +2,6 @@ package store.convenience;
 
 import java.util.List;
 import store.config.FilePath;
-import store.domain.Item;
 import store.util.FileLoad;
 import store.view.InputView;
 import store.view.OutputView;

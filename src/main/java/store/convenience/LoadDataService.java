@@ -4,6 +4,8 @@ import java.util.LinkedList;
 import java.util.List;
 import store.domain.Item;
 import store.domain.Item.ItemBuilder;
+import store.repository.ItemRepository;
+import store.repository.PromotionRepository;
 
 public class LoadDataService {
     private static final Integer PRODUCT_NAME_INDEX = 0;
@@ -15,6 +17,14 @@ public class LoadDataService {
     private static final Integer PROMOTION_GET_INDEX = 2;
     private static final Integer PROMOTION_START_INDEX = 3;
     private static final Integer PROMOTION_END_INDEX = 4;
+
+    private final ItemRepository itemRepository;
+    private final PromotionRepository promotionRepository;
+
+    public LoadDataService(ItemRepository itemRepository, PromotionRepository promotionRepository){
+        this.itemRepository = itemRepository;
+        this.promotionRepository = promotionRepository;
+    }
 
     public void saveProductData(List<String> productDatas) {
         List<Item> items = new LinkedList<>();
