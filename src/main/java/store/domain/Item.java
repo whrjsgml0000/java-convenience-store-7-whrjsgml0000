@@ -4,7 +4,7 @@ public class Item {
     private String name;
     private Integer price;
     private Integer quantity;
-    private Promotion promotion;
+    private String promotion;
 
     public String getName() {
         return name;
@@ -18,7 +18,7 @@ public class Item {
         return quantity;
     }
 
-    public Promotion getPromotion() {
+    public String getPromotion() {
         return promotion;
     }
 
@@ -30,7 +30,7 @@ public class Item {
         private String name;
         private Integer price;
         private Integer quantity;
-        private Promotion promotion;
+        private String promotion;
 
         private ItemBuilder() {
         }
@@ -54,7 +54,7 @@ public class Item {
             return this;
         }
 
-        public ItemBuilder promotion(Promotion promotion) {
+        public ItemBuilder promotion(String promotion) {
             this.promotion = promotion;
             return this;
         }
