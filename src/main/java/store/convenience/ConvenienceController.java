@@ -10,12 +10,19 @@ public class ConvenienceController {
     private final InputView inputView = new InputView();
     private final OutputView outputView = new OutputView();
     private final LoadDataService loadDataService;
-    public ConvenienceController(LoadDataService loadDataService){
+    private final ConvenienceService convenienceService;
+    private boolean continueShopping = true;
+    public ConvenienceController(LoadDataService loadDataService, ConvenienceService convenienceService){
         this.loadDataService = loadDataService;
+        this.convenienceService = convenienceService;
     }
 
     public void run(){
         saveLoadData();
+        while(continueShopping){
+            outputView.introduction(convenienceService.getCurrentState());
+            inputView.requestNameAndQuantity();
+        }
     }
 
     private void saveLoadData(){

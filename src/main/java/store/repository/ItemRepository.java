@@ -19,4 +19,8 @@ public class ItemRepository {
     public void saveAll(List<Item> items){
         this.items.addAll(items);
     }
+
+    public List<Item> findAll(){
+        return items;
+    }
 }
