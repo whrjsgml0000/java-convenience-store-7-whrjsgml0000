@@ -25,4 +25,5 @@ public class OutputView {
         }
         System.out.printf((PRINT_ITEM_FORMAT) + "%n", item.getName(), item.getPrice(), sQuantity, item.getPromotion());
     }
+
 }

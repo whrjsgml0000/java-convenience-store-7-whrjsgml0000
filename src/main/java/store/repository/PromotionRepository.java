@@ -3,6 +3,7 @@ package store.repository;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import store.domain.Promotion;
 
 public class PromotionRepository {
@@ -28,5 +29,9 @@ public class PromotionRepository {
         return promotions.stream()
                 .filter(promotion -> promotion.getStartDate().isBefore(today) && promotion.getEndDate().isAfter(today))
                 .toList();
+    }
+
+    public Optional<Promotion> findByName(String name){
+        return promotions.stream().filter(promotion -> promotion.getName().equals(name)).findAny();
     }
 }

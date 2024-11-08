@@ -1,8 +1,10 @@
 package store.convenience;
 
+import java.util.Map;
 import store.common.Response;
 import store.config.FilePath;
 import store.error.Input;
+import store.util.Extractor;
 import store.util.FileLoad;
 import store.view.ErrorPrinter;
 import store.view.InputView;
@@ -27,10 +29,28 @@ public class ConvenienceController {
     }
 
     private void shopping() {
-        getValidRequestNameAndQuantity();
+        String validNameAndQuantity = getValidRequestNameAndQuantity();
+        purchase(Extractor.getNameAndQuantityMap(validNameAndQuantity));
+        //todo receipt();
 
         if(inputView.requestContinueShopping() == Response.NO)
             continueShopping = false;
+    }
+
+    private void purchase(Map<String,Integer> nameAndQuantity) {
+        for(String name:nameAndQuantity.keySet()){
+            promotion(name, nameAndQuantity.get(name));
+
+        }
+    }
+
+    private void promotion(String name, int quantity) {
+        if(convenienceService.hasPromotion(name)){
+            int compareResult = convenienceService.compareQuantity(name, quantity);
+            if(compareResult > 0){
+                inputView.requestAddFreeItem(name, compareResult);
+            }
+        }
     }
 
     private String getValidRequestNameAndQuantity() {
