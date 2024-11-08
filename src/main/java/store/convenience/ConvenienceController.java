@@ -2,7 +2,9 @@ package store.convenience;
 
 import store.common.Response;
 import store.config.FilePath;
+import store.error.Input;
 import store.util.FileLoad;
+import store.view.ErrorPrinter;
 import store.view.InputView;
 import store.view.OutputView;
 

@@ -4,6 +4,7 @@ import java.util.List;
 import store.domain.Item;
 import store.repository.ItemRepository;
 import store.repository.PromotionRepository;
+import store.validator.PurchaseValidator;
 
 public class ConvenienceService {
     private final ItemRepository itemRepository;
@@ -18,6 +19,8 @@ public class ConvenienceService {
     }
 
     public boolean validNameAndQuantity(String input){
-        
+        return PurchaseValidator.validInputForm(input)
+                && PurchaseValidator.noDuplicatedItemInput(input)
+                && PurchaseValidator.existItemName(input,itemRepository.findAll());
     }
 }
