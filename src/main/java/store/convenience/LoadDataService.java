@@ -1,8 +1,10 @@
 package store.convenience;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Stream;
 import store.domain.Item;
 import store.domain.Item.ItemBuilder;
 import store.domain.Promotion;
@@ -103,18 +105,39 @@ public class LoadDataService {
     }
 
     private int validPromotionBuy(String buy){
-
+        try{
+            int iBuy = Integer.parseInt(buy);
+            if(iBuy <= 0)
+                throw new NumberFormatException();
+            return iBuy;
+        }catch (NumberFormatException e){
+            throw new IllegalArgumentException("프로모션 목록에 잘못된 구매 개수가 존재합니다.");
+        }
     }
 
     private int validPromotionGet(String get){
-
+        try{
+            int iGet = Integer.parseInt(get);
+            if(iGet <= 0)
+                throw new NumberFormatException();
+            return iGet;
+        }catch (NumberFormatException e){
+            throw new IllegalArgumentException("프로모션 목록에 잘못된 증정 개수가 존재합니다.");
+        }
     }
 
+    // todo 나중에 더 자세하게 만들기
     private LocalDateTime validPromotionStartDate(String startDate){
-
+        List<Integer> yearMonthDay = Arrays.stream(startDate.split("-"))
+                .map(Integer::parseInt)
+                .toList();
+        return LocalDateTime.of(yearMonthDay.get(0),yearMonthDay.get(1) ,yearMonthDay.get(2),0,0,0);
     }
 
     private LocalDateTime validPromotionEndDate(String endDate){
-
+        List<Integer> yearMonthDay = Arrays.stream(endDate.split("-"))
+                .map(Integer::parseInt)
+                .toList();
+        return LocalDateTime.of(yearMonthDay.get(0),yearMonthDay.get(1) ,yearMonthDay.get(2),23,59,59);
     }
 }
