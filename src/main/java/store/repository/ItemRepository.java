@@ -1,0 +1,21 @@
+package store.repository;
+
+import java.util.ArrayList;
+import store.domain.Item;
+
+public class ItemRepository {
+    private final ArrayList<Item> items = new ArrayList<>();
+    public static ItemRepository getInstance() {
+        return ItemRepositoryHolder.ITEM_REPOSITORY;
+    }
+    private static class ItemRepositoryHolder{
+        private static final ItemRepository ITEM_REPOSITORY = new ItemRepository();
+    }
+    private ItemRepository(){
+
+    }
+
+    public void saveAll(){
+
+    }
+}
