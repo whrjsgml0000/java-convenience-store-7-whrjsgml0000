@@ -3,6 +3,7 @@ package store.validator;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import store.domain.Item;
@@ -41,5 +42,23 @@ public class PurchaseValidator {
         ErrorPrinter.printError(Input.NULL_ITEM_NAME);
 
         return false;
+    }
+
+    public static boolean validQuantity(String input, List<Item> validItems){
+        Map<String, Integer> nameAndQuantityMap = Extractor.getNameAndQuantityMap(input);
+        if(nameAndQuantityMap.values().stream().anyMatch(value->value<=0)){
+            ErrorPrinter.printError(Input.INVALID_QUANTITY);
+            return false;
+        }
+        for(String name:nameAndQuantityMap.keySet()){
+            if(validItems.stream()
+                    .filter(item->item.getName().equals(name))
+                    .mapToInt(Item::getQuantity)
+                    .sum() < nameAndQuantityMap.get(name)){
+                ErrorPrinter.printError(Input.OVER_QUANTITY);
+                return false;
+            }
+        }
+        return true;
     }
 }

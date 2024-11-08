@@ -5,6 +5,8 @@ public enum Input implements Error{
     RESPONSE_FORM("응답 형식이 잘못됐습니다."),
     EXIST_ALREADY("중복된 상품이 존재합니다."),
     NULL_ITEM_NAME("존재하지 않는 상품은 구매할 수 없습니다."),
+    INVALID_QUANTITY("구매 수량이 잘못됐습니다."),
+    OVER_QUANTITY("재고보다 더 많이 구매할 수 없습니다."),
     ;
 
 
