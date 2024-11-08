@@ -14,6 +14,7 @@ public class FileLoad {
         try {
             BufferedReader br = new BufferedReader(new FileReader(file));
             String line;
+            br.readLine();
             while((line = br.readLine())!=null)
                 lines.add(line);
             br.close();

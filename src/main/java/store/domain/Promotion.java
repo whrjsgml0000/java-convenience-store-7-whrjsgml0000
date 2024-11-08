@@ -9,6 +9,25 @@ public class Promotion {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
 
+    public String getName() {
+        return name;
+    }
+
+    public Integer getBuy() {
+        return buy;
+    }
+
+    public Integer getGet() {
+        return get;
+    }
+
+    public LocalDateTime getStartDate() {
+        return startDate;
+    }
+
+    public LocalDateTime getEndDate() {
+        return endDate;
+    }
 
     public static final class PromotionBuilder {
         private String name;
