@@ -1,6 +1,7 @@
 package store.repository;
 
 import java.util.ArrayList;
+import java.util.List;
 import store.domain.Promotion;
 
 public class PromotionRepository {
@@ -15,7 +16,7 @@ public class PromotionRepository {
 
     }
 
-    public void saveAll(){
-
+    public void saveAll(List<Promotion> promotions){
+        this.promotions.addAll(promotions);
     }
 }

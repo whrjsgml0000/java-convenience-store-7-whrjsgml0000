@@ -9,11 +9,9 @@ import store.domain.Item.ItemBuilder;
 
 class OutputViewTest {
     OutputView outputView = new OutputView();
-    ConvenienceController convenienceController = new ConvenienceController();
 
     @Test
     void printItem() {
-        convenienceController.run();
 
     }
 }

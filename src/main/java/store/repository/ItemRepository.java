@@ -1,6 +1,7 @@
 package store.repository;
 
 import java.util.ArrayList;
+import java.util.List;
 import store.domain.Item;
 
 public class ItemRepository {
@@ -15,7 +16,7 @@ public class ItemRepository {
 
     }
 
-    public void saveAll(){
-
+    public void saveAll(List<Item> items){
+        this.items.addAll(items);
     }
 }

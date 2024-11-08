@@ -6,16 +6,16 @@ public class Promotion {
     private String name;
     private Integer buy;
     private Integer get;
-    private LocalDateTime start_date;
-    private LocalDateTime end_date;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
 
 
     public static final class PromotionBuilder {
         private String name;
         private Integer buy;
         private Integer get;
-        private LocalDateTime start_date;
-        private LocalDateTime end_date;
+        private LocalDateTime startDate;
+        private LocalDateTime endDate;
 
         private PromotionBuilder() {
         }
@@ -39,21 +39,21 @@ public class Promotion {
             return this;
         }
 
-        public PromotionBuilder start_date(LocalDateTime start_date) {
-            this.start_date = start_date;
+        public PromotionBuilder startDate(LocalDateTime startDate) {
+            this.startDate = startDate;
             return this;
         }
 
-        public PromotionBuilder end_date(LocalDateTime end_date) {
-            this.end_date = end_date;
+        public PromotionBuilder endDate(LocalDateTime endDate) {
+            this.endDate = endDate;
             return this;
         }
 
         public Promotion build() {
             Promotion promotion = new Promotion();
             promotion.buy = this.buy;
-            promotion.end_date = this.end_date;
-            promotion.start_date = this.start_date;
+            promotion.endDate = this.endDate;
+            promotion.startDate = this.startDate;
             promotion.name = this.name;
             promotion.get = this.get;
             return promotion;

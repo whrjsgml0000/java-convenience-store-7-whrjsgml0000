@@ -7,10 +7,11 @@ import store.view.InputView;
 import store.view.OutputView;
 
 public class ConvenienceController {
-    InputView inputView = new InputView();
-    OutputView outputView = new OutputView();
-    public ConvenienceController(){
-
+    private final InputView inputView = new InputView();
+    private final OutputView outputView = new OutputView();
+    private final LoadDataService loadDataService;
+    public ConvenienceController(LoadDataService loadDataService){
+        this.loadDataService = loadDataService;
     }
 
     public void run(){
@@ -18,7 +19,7 @@ public class ConvenienceController {
     }
 
     private void saveLoadData(){
-        List<String> productData = FileLoad.LoadFile(FilePath.PRODUCT.path());
-        List<String> promotionData = FileLoad.LoadFile(FilePath.PROMOTIONS.path());
+        loadDataService.saveProductData(FileLoad.LoadFile(FilePath.PRODUCT.path()));
+        loadDataService.savePromotionData(FileLoad.LoadFile(FilePath.PROMOTIONS.path()));
     }
 }

@@ -6,10 +6,10 @@ import store.repository.ItemRepository;
 import store.repository.PromotionRepository;
 
 public class Configuration {
-    ConvenienceController convenienceController = new ConvenienceController();
-    ItemRepository itemRepository = ItemRepository.getInstance();
-    PromotionRepository promotionRepository = PromotionRepository.getInstance();
-    LoadDataService loadDataService;
+    private final ConvenienceController convenienceController;
+    private final ItemRepository itemRepository = ItemRepository.getInstance();
+    private final PromotionRepository promotionRepository = PromotionRepository.getInstance();
+    private final LoadDataService loadDataService;
     public static Configuration getInstance() {
         return ConfigurationHolder.CONFIGURATION;
     }
@@ -18,6 +18,7 @@ public class Configuration {
     }
     private Configuration(){
         loadDataService = new LoadDataService(itemRepository,promotionRepository);
+        convenienceController = new ConvenienceController(loadDataService);
     }
 
     public ConvenienceController getConvenienceController() {

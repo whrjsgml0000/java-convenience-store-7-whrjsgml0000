@@ -1,9 +1,12 @@
 package store.convenience;
 
+import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 import store.domain.Item;
 import store.domain.Item.ItemBuilder;
+import store.domain.Promotion;
+import store.domain.Promotion.PromotionBuilder;
 import store.repository.ItemRepository;
 import store.repository.PromotionRepository;
 
@@ -30,6 +33,7 @@ public class LoadDataService {
         List<Item> items = new LinkedList<>();
         productDatas.stream().map(this::parseProductData)
                 .forEach(items::add);
+        itemRepository.saveAll(items);
     }
 
     private Item parseProductData(String productData) {
@@ -43,11 +47,21 @@ public class LoadDataService {
     }
 
     public void savePromotionData(List<String> promotionDatas) {
-
+        List<Promotion> promotions = new LinkedList<>();
+        promotionDatas.stream().map(this::parsePromotionData)
+                .forEach(promotions::add);
+        promotionRepository.saveAll(promotions);
     }
 
-    private void parsePromotionData(String promotionData) {
-
+    private Promotion parsePromotionData(String promotionData) {
+        String[] data = promotionData.split(",");
+        return PromotionBuilder.builder()
+                .name(validName(data[PROMOTION_NAME_INDEX]))
+                .buy(validPromotionBuy(data[PROMOTION_BUY_INDEX]))
+                .get(validPromotionGet(data[PROMOTION_GET_INDEX]))
+                .startDate(validPromotionStartDate(data[PROMOTION_START_INDEX]))
+                .endDate(validPromotionEndDate(data[PROMOTION_END_INDEX]))
+                .build();
     }
 
     private String validName(String name) {
@@ -86,5 +100,21 @@ public class LoadDataService {
             return "";
         }
         return promotion;
+    }
+
+    private int validPromotionBuy(String buy){
+
+    }
+
+    private int validPromotionGet(String get){
+
+    }
+
+    private LocalDateTime validPromotionStartDate(String startDate){
+
+    }
+
+    private LocalDateTime validPromotionEndDate(String endDate){
+
     }
 }
