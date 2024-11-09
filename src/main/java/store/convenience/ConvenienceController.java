@@ -32,7 +32,6 @@ public class ConvenienceController {
         String validNameAndQuantity = getValidRequestNameAndQuantity();
         purchase(Extractor.getNameAndQuantityMap(validNameAndQuantity));
 
-        //todo membership();
         //todo receipt();
 
         if(inputView.requestContinueShopping() == Response.NO)
@@ -50,7 +49,10 @@ public class ConvenienceController {
         if(convenienceService.hasPromotion(name)){
             int compareResult = convenienceService.compareQuantity(name, quantity);
             if(compareResult > 0){
-                inputView.requestAddFreeItem(name, compareResult);
+                Response response = inputView.requestAddFreeItem(name, compareResult);
+            }
+            if(compareResult < 0){
+                Response response = inputView.requestCantReceivePromotion(name,-compareResult);
             }
         }
     }

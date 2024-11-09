@@ -2,6 +2,7 @@ package store.view;
 
 import java.util.List;
 import store.domain.Item;
+import store.domain.Receipt;
 
 public class OutputView {
     private static final String PRINT_ITEM_FORMAT = "- %s %,d원 %s %s";
@@ -26,4 +27,7 @@ public class OutputView {
         System.out.printf((PRINT_ITEM_FORMAT) + "%n", item.getName(), item.getPrice(), sQuantity, item.getPromotion());
     }
 
+    public void printReceipt(Receipt receipt){
+        System.out.println(receipt);
+    }
 }

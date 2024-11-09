@@ -27,7 +27,6 @@ public class PurchaseDTO {
         return promotion;
     }
 
-
     public static final class PurchaseDTOBuilder {
         private String name;
         private Integer quantity;

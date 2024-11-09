@@ -63,7 +63,7 @@ public class ConvenienceService {
         }
         // 프로모션 받지 못하는 양을 리턴함.
         if (promotionItem.getQuantity() < quantity) {
-            return -(quantity - (promotionItem.getQuantity() % (promotion.getBuy() + promotion.getGet())));
+            return -(quantity - (promotion.getBuy() + promotion.getGet()) * (promotionItem.getQuantity() / (promotion.getBuy() + promotion.getGet())));
         }
         return 0;
     }
