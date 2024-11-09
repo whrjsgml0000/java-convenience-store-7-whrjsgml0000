@@ -31,7 +31,7 @@ public class PromotionRepository {
                 .toList();
     }
 
-    public Optional<Promotion> findByName(String name){
+    public Optional<Promotion> findByName(String name) {
         return promotions.stream().filter(promotion -> promotion.getName().equals(name)).findAny();
     }
 }

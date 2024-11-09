@@ -6,27 +6,30 @@ import store.domain.Item;
 
 public class ItemRepository {
     private final ArrayList<Item> items = new ArrayList<>();
+
     public static ItemRepository getInstance() {
         return ItemRepositoryHolder.ITEM_REPOSITORY;
     }
-    private static class ItemRepositoryHolder{
+
+    private static class ItemRepositoryHolder {
         private static final ItemRepository ITEM_REPOSITORY = new ItemRepository();
     }
-    private ItemRepository(){
+
+    private ItemRepository() {
 
     }
 
-    public void saveAll(List<Item> items){
+    public void saveAll(List<Item> items) {
         this.items.addAll(items);
     }
 
-    public List<Item> findAll(){
+    public List<Item> findAll() {
         return items;
     }
 
-    public List<Item> findByName(String name){
+    public List<Item> findByName(String name) {
         return items.stream()
-                .filter(item->item.getName().equals(name))
+                .filter(item -> item.getName().equals(name))
                 .toList();
     }
 }

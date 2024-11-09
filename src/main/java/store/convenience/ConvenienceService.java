@@ -104,7 +104,6 @@ public class ConvenienceService {
                 builder.promotion(true);
             }
 
-
             promotionItem.cell(min);
             quantity -= min;
         }

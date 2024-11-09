@@ -12,14 +12,17 @@ public class Configuration {
     private final PromotionRepository promotionRepository = PromotionRepository.getInstance();
     private final ConvenienceService convenienceService;
     private final LoadDataService loadDataService;
+
     public static Configuration getInstance() {
         return ConfigurationHolder.CONFIGURATION;
     }
-    private static class ConfigurationHolder{
+
+    private static class ConfigurationHolder {
         private static final Configuration CONFIGURATION = new Configuration();
     }
-    private Configuration(){
-        loadDataService = new LoadDataService(itemRepository,promotionRepository);
+
+    private Configuration() {
+        loadDataService = new LoadDataService(itemRepository, promotionRepository);
         convenienceService = new ConvenienceService(itemRepository, promotionRepository);
         convenienceController = new ConvenienceController(loadDataService, convenienceService);
     }

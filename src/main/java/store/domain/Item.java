@@ -22,7 +22,7 @@ public class Item {
         return promotion;
     }
 
-    public void cell(int quantity){
+    public void cell(int quantity) {
         this.quantity -= quantity;
     }
 

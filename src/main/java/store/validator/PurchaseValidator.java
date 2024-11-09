@@ -22,11 +22,11 @@ public class PurchaseValidator {
         return false;
     }
 
-    public static boolean noDuplicatedItemInput(String input){
-        if(Arrays.stream(input.split(","))
-                .map(s->s.substring(1,s.indexOf("-")))
+    public static boolean noDuplicatedItemInput(String input) {
+        if (Arrays.stream(input.split(","))
+                .map(s -> s.substring(1, s.indexOf("-")))
                 .distinct()
-                .count() == input.split(",").length){
+                .count() == input.split(",").length) {
             return true;
         }
         ErrorPrinter.printError(Input.EXIST_ALREADY);
@@ -35,8 +35,8 @@ public class PurchaseValidator {
 
     public static boolean existItemName(String input, List<Item> items) {
         List<String> list = items.stream().map(Item::getName).toList();
-        if(new HashSet<>(list).containsAll(Extractor.getNameAndQuantityMap(input)
-                .keySet())){
+        if (new HashSet<>(list).containsAll(Extractor.getNameAndQuantityMap(input)
+                .keySet())) {
             return true;
         }
         ErrorPrinter.printError(Input.NULL_ITEM_NAME);
@@ -44,17 +44,17 @@ public class PurchaseValidator {
         return false;
     }
 
-    public static boolean validQuantity(String input, List<Item> validItems){
+    public static boolean validQuantity(String input, List<Item> validItems) {
         Map<String, Integer> nameAndQuantityMap = Extractor.getNameAndQuantityMap(input);
-        if(nameAndQuantityMap.values().stream().anyMatch(value->value<=0)){
+        if (nameAndQuantityMap.values().stream().anyMatch(value -> value <= 0)) {
             ErrorPrinter.printError(Input.INVALID_QUANTITY);
             return false;
         }
-        for(String name:nameAndQuantityMap.keySet()){
-            if(validItems.stream()
-                    .filter(item->item.getName().equals(name))
+        for (String name : nameAndQuantityMap.keySet()) {
+            if (validItems.stream()
+                    .filter(item -> item.getName().equals(name))
                     .mapToInt(Item::getQuantity)
-                    .sum() < nameAndQuantityMap.get(name)){
+                    .sum() < nameAndQuantityMap.get(name)) {
                 ErrorPrinter.printError(Input.OVER_QUANTITY);
                 return false;
             }

@@ -45,7 +45,7 @@ public class LoadDataService {
                         .price(frontItem.getPrice())
                         .quantity(0)
                         .build();
-                items.add(index+1,build);
+                items.add(index + 1, build);
             }
         }
         itemRepository.saveAll(items);

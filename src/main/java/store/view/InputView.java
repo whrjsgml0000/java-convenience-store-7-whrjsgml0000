@@ -45,19 +45,19 @@ public class InputView {
 
     public Response requestCantReceivePromotion(String name, int quantity) {
         System.out.printf("\n현재 %s %d개는 프로모션 할인이 적용되지 않습니다. 그래도 구매하시겠습니까? (Y/N)%n", name, quantity);
-        while(true){
+        while (true) {
             Response response = parseResponse(Console.readLine());
-            if(response != Response.ERROR){
+            if (response != Response.ERROR) {
                 return response;
             }
         }
     }
 
-    public Response requestMemberShip(){
+    public Response requestMemberShip() {
         System.out.println("\n멤버십 할인을 받으시겠습니까? (Y/N)");
-        while(true){
+        while (true) {
             Response response = parseResponse(Console.readLine());
-            if(response != Response.ERROR){
+            if (response != Response.ERROR) {
                 return response;
             }
         }

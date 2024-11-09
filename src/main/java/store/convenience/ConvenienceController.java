@@ -5,10 +5,8 @@ import store.common.Response;
 import store.config.FilePath;
 import store.domain.Receipt;
 import store.dto.PurchaseDTO;
-import store.error.Input;
 import store.util.Extractor;
 import store.util.FileLoad;
-import store.view.ErrorPrinter;
 import store.view.InputView;
 import store.view.OutputView;
 
@@ -18,14 +16,15 @@ public class ConvenienceController {
     private final LoadDataService loadDataService;
     private final ConvenienceService convenienceService;
     private boolean continueShopping = true;
-    public ConvenienceController(LoadDataService loadDataService, ConvenienceService convenienceService){
+
+    public ConvenienceController(LoadDataService loadDataService, ConvenienceService convenienceService) {
         this.loadDataService = loadDataService;
         this.convenienceService = convenienceService;
     }
 
-    public void run(){
+    public void run() {
         saveLoadData();
-        while(continueShopping){
+        while (continueShopping) {
             shopping();
         }
     }
@@ -35,41 +34,45 @@ public class ConvenienceController {
         Receipt receipt = purchase(Extractor.getNameAndQuantityMap(validNameAndQuantity));
         receipt(receipt);
 
-        if(inputView.requestContinueShopping() == Response.NO)
+        if (inputView.requestContinueShopping() == Response.NO) {
             continueShopping = false;
+        }
     }
 
-    private Receipt purchase(Map<String,Integer> nameAndQuantity) {
+    private Receipt purchase(Map<String, Integer> nameAndQuantity) {
         Receipt receipt = new Receipt();
-        for(String name:nameAndQuantity.keySet()){
+        for (String name : nameAndQuantity.keySet()) {
             int quantity = promotion(name, nameAndQuantity.get(name));
-            PurchaseDTO purchaseDTO = convenienceService.purchase(name,quantity);
+            PurchaseDTO purchaseDTO = convenienceService.purchase(name, quantity);
             receipt.addPurchase(purchaseDTO);
         }
         return receipt;
     }
 
-    private void receipt(Receipt receipt){
+    private void receipt(Receipt receipt) {
         receipt.setMemberShip(false);
-        if(inputView.requestMemberShip() == Response.YES)
+        if (inputView.requestMemberShip() == Response.YES) {
             receipt.setMemberShip(true);
+        }
         outputView.printReceipt(receipt);
     }
 
     // todo 리팩토링 필수.
     private int promotion(String name, int quantity) {
-        if(convenienceService.hasPromotion(name)){
+        if (convenienceService.hasPromotion(name)) {
             int compareResult = convenienceService.compareQuantity(name, quantity);
-            if(compareResult > 0){
+            if (compareResult > 0) {
                 Response response = inputView.requestAddFreeItem(name, compareResult);
-                if(response == Response.YES)
+                if (response == Response.YES) {
                     return quantity + compareResult;
+                }
                 return quantity;
             }
-            if(compareResult < 0){
-                Response response = inputView.requestCantReceivePromotion(name,-compareResult);
-                if(response == Response.YES)
+            if (compareResult < 0) {
+                Response response = inputView.requestCantReceivePromotion(name, -compareResult);
+                if (response == Response.YES) {
                     return quantity;
+                }
                 return quantity + compareResult;
             }
         }
@@ -78,14 +81,15 @@ public class ConvenienceController {
 
     private String getValidRequestNameAndQuantity() {
         outputView.introduction(convenienceService.getCurrentState());
-        while(true) {
+        while (true) {
             String nameAndQuantity = inputView.requestNameAndQuantity();
-            if(convenienceService.validNameAndQuantity(nameAndQuantity))
+            if (convenienceService.validNameAndQuantity(nameAndQuantity)) {
                 return nameAndQuantity;
+            }
         }
     }
 
-    private void saveLoadData(){
+    private void saveLoadData() {
         loadDataService.saveProductData(FileLoad.LoadFile(FilePath.PRODUCT.path()));
         loadDataService.savePromotionData(FileLoad.LoadFile(FilePath.PROMOTIONS.path()));
     }

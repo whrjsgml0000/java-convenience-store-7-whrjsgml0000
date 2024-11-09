@@ -15,7 +15,7 @@ public class Extractor {
     public static Map<String, Integer> getNameAndQuantityMap(String input) {
         return Arrays.stream(input.split(","))
                 .map(s -> s.substring(1, s.length() - 1))
-                .map(s->s.split("-"))
-                .collect(Collectors.toMap(s->s[0],s->Integer.parseInt(s[1])));
+                .map(s -> s.split("-"))
+                .collect(Collectors.toMap(s -> s[0], s -> Integer.parseInt(s[1])));
     }
 }

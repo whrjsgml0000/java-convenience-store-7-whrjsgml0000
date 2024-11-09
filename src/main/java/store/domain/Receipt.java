@@ -43,7 +43,7 @@ public class Receipt {
         sb.append(String.format(ITEM_FORMAT, "총구매액", list.stream().mapToInt(PurchaseDTO::getQuantity).sum(),
                 getTotalPrice()));
         sb.append(String.format(SALE_FORMAT, "행사할인", getPromotionSale()));
-        sb.append(String.format(SALE_FORMAT, "멤버십할인" , getMemberShipSale()));
+        sb.append(String.format(SALE_FORMAT, "멤버십할인", getMemberShipSale()));
         sb.append(String.format(TOTAL_FORMAT, "내실돈", getTotalPrice() - getPromotionSale() - getMemberShipSale()));
         return sb.toString();
     }
