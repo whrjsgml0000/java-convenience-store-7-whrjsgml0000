@@ -31,6 +31,8 @@ public class ConvenienceController {
     private void shopping() {
         String validNameAndQuantity = getValidRequestNameAndQuantity();
         purchase(Extractor.getNameAndQuantityMap(validNameAndQuantity));
+
+        //todo membership();
         //todo receipt();
 
         if(inputView.requestContinueShopping() == Response.NO)
