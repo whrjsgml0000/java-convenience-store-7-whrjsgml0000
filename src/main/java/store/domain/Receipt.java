@@ -7,6 +7,7 @@ public class Receipt {
     private static final String ITEM_FORMAT = "%-16s%-10s%-,5d\n";
     private static final String TITLE_FORMAT = "%-16s%-10s%s\n";
     private static final String TOTAL_FORMAT = "%-26s%-,5d\n";
+    private static final String SALE_FORMAT = "%-26s-%-,5d\n";
     private static final String FREE_FORMAT = "%-16s%d\n";
     LinkedList<PurchaseDTO> list;
 
@@ -41,8 +42,8 @@ public class Receipt {
         sb.append("====================================\n");
         sb.append(String.format(ITEM_FORMAT, "총구매액", list.stream().mapToInt(PurchaseDTO::getQuantity).sum(),
                 getTotalPrice()));
-        sb.append(String.format(TOTAL_FORMAT, "행사할인", getPromotionSale()));
-        sb.append(String.format(TOTAL_FORMAT, "멤버십할인" , getMemberShipSale()));
+        sb.append(String.format(SALE_FORMAT, "행사할인", getPromotionSale()));
+        sb.append(String.format(SALE_FORMAT, "멤버십할인" , getMemberShipSale()));
         sb.append(String.format(TOTAL_FORMAT, "내실돈", getTotalPrice() - getPromotionSale() - getMemberShipSale()));
         return sb.toString();
     }
