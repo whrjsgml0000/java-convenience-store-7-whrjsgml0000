@@ -3,6 +3,8 @@ package store.convenience;
 import java.util.Map;
 import store.common.Response;
 import store.config.FilePath;
+import store.domain.Receipt;
+import store.dto.PurchaseDTO;
 import store.error.Input;
 import store.util.Extractor;
 import store.util.FileLoad;
@@ -30,31 +32,48 @@ public class ConvenienceController {
 
     private void shopping() {
         String validNameAndQuantity = getValidRequestNameAndQuantity();
-        purchase(Extractor.getNameAndQuantityMap(validNameAndQuantity));
-
-        //todo receipt();
+        Receipt receipt = purchase(Extractor.getNameAndQuantityMap(validNameAndQuantity));
+        receipt(receipt);
 
         if(inputView.requestContinueShopping() == Response.NO)
             continueShopping = false;
     }
 
-    private void purchase(Map<String,Integer> nameAndQuantity) {
+    private Receipt purchase(Map<String,Integer> nameAndQuantity) {
+        Receipt receipt = new Receipt();
         for(String name:nameAndQuantity.keySet()){
-            promotion(name, nameAndQuantity.get(name));
-
+            int quantity = promotion(name, nameAndQuantity.get(name));
+            PurchaseDTO purchaseDTO = convenienceService.purchase(name,quantity);
+            receipt.addPurchase(purchaseDTO);
         }
+        return receipt;
     }
 
-    private void promotion(String name, int quantity) {
+    private void receipt(Receipt receipt){
+        receipt.setMemberShip(false);
+        if(inputView.requestMemberShip() == Response.YES)
+            receipt.setMemberShip(true);
+        outputView.printReceipt(receipt);
+    }
+
+    // todo 리팩토링 필수.
+    private int promotion(String name, int quantity) {
         if(convenienceService.hasPromotion(name)){
             int compareResult = convenienceService.compareQuantity(name, quantity);
             if(compareResult > 0){
                 Response response = inputView.requestAddFreeItem(name, compareResult);
+                if(response == Response.YES)
+                    return quantity + compareResult;
+                return quantity;
             }
             if(compareResult < 0){
                 Response response = inputView.requestCantReceivePromotion(name,-compareResult);
+                if(response == Response.YES)
+                    return quantity;
+                return quantity + compareResult;
             }
         }
+        return quantity;
     }
 
     private String getValidRequestNameAndQuantity() {

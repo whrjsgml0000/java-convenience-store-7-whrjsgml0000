@@ -17,7 +17,6 @@ public class InputView {
             if (response != Response.ERROR) {
                 return response;
             }
-            ErrorPrinter.printError(Input.RESPONSE_FORM);
         }
     }
 
@@ -41,7 +40,6 @@ public class InputView {
             if (response != Response.ERROR) {
                 return response;
             }
-            ErrorPrinter.printError(Input.RESPONSE_FORM);
         }
     }
 
@@ -52,7 +50,16 @@ public class InputView {
             if(response != Response.ERROR){
                 return response;
             }
-            ErrorPrinter.printError(Input.RESPONSE_FORM);
+        }
+    }
+
+    public Response requestMemberShip(){
+        System.out.println("멤버십 할인을 받으시겠습니까? (Y/N)");
+        while(true){
+            Response response = parseResponse(Console.readLine());
+            if(response != Response.ERROR){
+                return response;
+            }
         }
     }
 }

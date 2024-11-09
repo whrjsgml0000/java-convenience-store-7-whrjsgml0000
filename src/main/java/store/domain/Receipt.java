@@ -5,6 +5,9 @@ import store.dto.PurchaseDTO;
 
 public class Receipt {
     LinkedList<PurchaseDTO> list;
+    public Receipt(){
+        list = new LinkedList<>();
+    }
 
     public void addPurchase(PurchaseDTO purchaseDTO){
         list.add(purchaseDTO);
@@ -14,7 +17,7 @@ public class Receipt {
         this.memberShip = memberShip;
     }
 
-    private boolean memberShip = false;
+    private boolean memberShip;
 
     // todo 여기에요 여기가 지옥이에요
 
@@ -22,18 +25,20 @@ public class Receipt {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("==============W 편의점================\n");
+        sb.append(String.format("%-16s%-10s%s\n","상품명","수량","금액"));
         list.forEach(purchaseDTO ->
-                sb.append(String.format("%20s%10d%,d\n", purchaseDTO.getName(), purchaseDTO.getQuantity(),
+                sb.append(String.format("%-20s%-10d%,d\n", purchaseDTO.getName(), purchaseDTO.getQuantity(),
                         getTotalPrice(purchaseDTO))));
         sb.append("=============증\t정===============\n");
         list.stream().filter(purchaseDTO -> purchaseDTO.getFreeQuantity() != 0)
                 .forEach(purchaseDTO ->
-                        sb.append(String.format("%20s%d\n", purchaseDTO.getName(), purchaseDTO.getFreeQuantity())));
-        sb.append(String.format("%20s%10d%,d\n", "총구매액", list.stream().mapToInt(PurchaseDTO::getPrice).sum(),
+                        sb.append(String.format("%-20s%-4d\n", purchaseDTO.getName(), purchaseDTO.getFreeQuantity())));
+        sb.append("====================================\n");
+        sb.append(String.format("%-20s%-10d%,d\n", "총구매액", list.stream().mapToInt(PurchaseDTO::getQuantity).sum(),
                 getTotalPrice()));
-        sb.append(String.format("%20s%10s-%,d\n", "행사할인", "", getPromotionSale()));
-        sb.append(String.format("%20s%10s-%,d\n", "멤버십할인", "", getMemberShipSale()));
-        sb.append(String.format("%20s%10s%,d\n", "내실돈", "", getTotalPrice()-getPromotionSale()-getMemberShipSale()));
+        sb.append(String.format("%-20s%-10s-%,d\n", "행사할인", "", getPromotionSale()));
+        sb.append(String.format("%-20s%-10s-%,d\n", "멤버십할인", "", getMemberShipSale()));
+        sb.append(String.format("%-20s%-10s%,d\n", "내실돈", "", getTotalPrice()-getPromotionSale()-getMemberShipSale()));
         return sb.toString();
     }
 
