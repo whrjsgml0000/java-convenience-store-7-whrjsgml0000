@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Stream;
 import store.domain.Item;
 import store.domain.Item.ItemBuilder;
 import store.domain.Promotion;
@@ -26,15 +25,29 @@ public class LoadDataService {
     private final ItemRepository itemRepository;
     private final PromotionRepository promotionRepository;
 
-    public LoadDataService(ItemRepository itemRepository, PromotionRepository promotionRepository){
+    public LoadDataService(ItemRepository itemRepository, PromotionRepository promotionRepository) {
         this.itemRepository = itemRepository;
         this.promotionRepository = promotionRepository;
     }
 
+    //todo 리팩토링 필수
     public void saveProductData(List<String> productDatas) {
         List<Item> items = new LinkedList<>();
         productDatas.stream().map(this::parseProductData)
                 .forEach(items::add);
+        for (int index = 0; index < items.size(); index++) {
+            Item frontItem = items.get(index);
+            if (!frontItem.getPromotion().isBlank() && (items.get(index + 1) == null || !items.get(index + 1)
+                    .getName().equals(frontItem.getName()))) {
+                Item build = ItemBuilder.builder()
+                        .name(frontItem.getName())
+                        .promotion("")
+                        .price(frontItem.getPrice())
+                        .quantity(0)
+                        .build();
+                items.add(index+1,build);
+            }
+        }
         itemRepository.saveAll(items);
     }
 
@@ -47,6 +60,7 @@ public class LoadDataService {
                 .promotion(validProductPromotion(data[PRODUCT_PROMOTION_INDEX]))
                 .build();
     }
+
 
     public void savePromotionData(List<String> promotionDatas) {
         List<Promotion> promotions = new LinkedList<>();
@@ -104,40 +118,42 @@ public class LoadDataService {
         return promotion;
     }
 
-    private int validPromotionBuy(String buy){
-        try{
+    private int validPromotionBuy(String buy) {
+        try {
             int iBuy = Integer.parseInt(buy);
-            if(iBuy <= 0)
+            if (iBuy <= 0) {
                 throw new NumberFormatException();
+            }
             return iBuy;
-        }catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             throw new IllegalArgumentException("프로모션 목록에 잘못된 구매 개수가 존재합니다.");
         }
     }
 
-    private int validPromotionGet(String get){
-        try{
+    private int validPromotionGet(String get) {
+        try {
             int iGet = Integer.parseInt(get);
-            if(iGet <= 0)
+            if (iGet <= 0) {
                 throw new NumberFormatException();
+            }
             return iGet;
-        }catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             throw new IllegalArgumentException("프로모션 목록에 잘못된 증정 개수가 존재합니다.");
         }
     }
 
     // todo 나중에 더 자세하게 만들기
-    private LocalDateTime validPromotionStartDate(String startDate){
+    private LocalDateTime validPromotionStartDate(String startDate) {
         List<Integer> yearMonthDay = Arrays.stream(startDate.split("-"))
                 .map(Integer::parseInt)
                 .toList();
-        return LocalDateTime.of(yearMonthDay.get(0),yearMonthDay.get(1) ,yearMonthDay.get(2),0,0,0);
+        return LocalDateTime.of(yearMonthDay.get(0), yearMonthDay.get(1), yearMonthDay.get(2), 0, 0, 0);
     }
 
-    private LocalDateTime validPromotionEndDate(String endDate){
+    private LocalDateTime validPromotionEndDate(String endDate) {
         List<Integer> yearMonthDay = Arrays.stream(endDate.split("-"))
                 .map(Integer::parseInt)
                 .toList();
-        return LocalDateTime.of(yearMonthDay.get(0),yearMonthDay.get(1) ,yearMonthDay.get(2),23,59,59);
+        return LocalDateTime.of(yearMonthDay.get(0), yearMonthDay.get(1), yearMonthDay.get(2), 23, 59, 59);
     }
 }
