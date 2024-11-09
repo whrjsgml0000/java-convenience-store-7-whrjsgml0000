@@ -12,7 +12,6 @@ public class OutputView {
         System.out.println("현재 보유하고 있는 상품입니다.");
         System.out.println();
         printAllItem(items);
-        System.out.println();
     }
 
     private void printAllItem(List<Item> items){
@@ -28,6 +27,6 @@ public class OutputView {
     }
 
     public void printReceipt(Receipt receipt){
-        System.out.println(receipt);
+        System.out.print(receipt);
     }
 }

@@ -4,10 +4,10 @@ import java.util.LinkedList;
 import store.dto.PurchaseDTO;
 
 public class Receipt {
-    private static final String ITEM_FORMAT = "%-16s%-10s%-,5d\n";
-    private static final String TITLE_FORMAT = "%-16s%-10s%s\n";
-    private static final String TOTAL_FORMAT = "%-26s%-,5d\n";
-    private static final String SALE_FORMAT = "%-26s-%-,5d\n";
+    private static final String ITEM_FORMAT = "%-16s%-12s%-,5d\n";
+    private static final String TITLE_FORMAT = "%-16s%-12s%s\n";
+    private static final String TOTAL_FORMAT = "%-28s%-,5d\n";
+    private static final String SALE_FORMAT = "%-28s-%-,5d\n";
     private static final String FREE_FORMAT = "%-16s%d\n";
     LinkedList<PurchaseDTO> list;
 
@@ -30,7 +30,7 @@ public class Receipt {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("==============W 편의점================\n");
+        sb.append("\n==============W 편의점================\n");
         sb.append(String.format(TITLE_FORMAT, "상품명", "수량", "금액"));
         list.forEach(purchaseDTO ->
                 sb.append(String.format(ITEM_FORMAT, purchaseDTO.getName(), purchaseDTO.getQuantity(),
