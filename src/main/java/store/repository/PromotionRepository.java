@@ -34,4 +34,8 @@ public class PromotionRepository {
     public Optional<Promotion> findByName(String name) {
         return promotions.stream().filter(promotion -> promotion.getName().equals(name)).findAny();
     }
+
+    public void reset(){
+        promotions.clear();
+    }
 }

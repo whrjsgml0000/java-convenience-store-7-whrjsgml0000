@@ -13,15 +13,7 @@ public class Configuration {
     private final ConvenienceService convenienceService;
     private final LoadDataService loadDataService;
 
-    public static Configuration getInstance() {
-        return ConfigurationHolder.CONFIGURATION;
-    }
-
-    private static class ConfigurationHolder {
-        private static final Configuration CONFIGURATION = new Configuration();
-    }
-
-    private Configuration() {
+    public Configuration() {
         loadDataService = new LoadDataService(itemRepository, promotionRepository);
         convenienceService = new ConvenienceService(itemRepository, promotionRepository);
         convenienceController = new ConvenienceController(loadDataService, convenienceService);

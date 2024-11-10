@@ -32,4 +32,8 @@ public class ItemRepository {
                 .filter(item -> item.getName().equals(name))
                 .toList();
     }
+
+    public void reset(){
+        items.clear();
+    }
 }

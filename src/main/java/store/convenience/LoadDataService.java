@@ -28,6 +28,8 @@ public class LoadDataService {
     public LoadDataService(ItemRepository itemRepository, PromotionRepository promotionRepository) {
         this.itemRepository = itemRepository;
         this.promotionRepository = promotionRepository;
+        itemRepository.reset();
+        promotionRepository.reset();
     }
 
     //todo 리팩토링 필수
