@@ -56,9 +56,9 @@ public class ConvenienceService {
     // 초과할 경우 못받는 양을 -로 전달하고, 부족할 경우 +로 안내함.
     // todo 리팩토링 필수적으로 보임.
     public int compareQuantity(String name, int quantity) {
-        List<Item> allItem = getValidItem().stream().filter(item -> item.getName().equals(name)).toList();
-        Item promotionItem = allItem.stream().filter(item -> !item.getPromotion().isBlank()).findAny().get();
-        Promotion promotion = promotionRepository.findByName(promotionItem.getPromotion()).get();
+        List<Item> allItem = getItemAllWithName(name);
+        Item promotionItem = getPromotionItem(allItem);
+        Promotion promotion = getPromotionWithItem(promotionItem);
         // 프로모션이 충분히 남아있고, 추가받을 양을 안가지고 온 경우
         if (promotion.getBuy() + promotion.getGet() < promotionItem.getQuantity()
                 && quantity == promotion.getBuy()) {
@@ -67,48 +67,58 @@ public class ConvenienceService {
         // 프로모션 받지 못하는 양을 리턴함.
         if (promotionItem.getQuantity() < quantity) {
             return -(quantity - (promotion.getBuy() + promotion.getGet()) * (promotionItem.getQuantity() / (
-                    promotion.getBuy() + promotion.getGet())));
+                    promotion.getBuy() + promotion.getGet()))); // 이 만큼 프로모션 혜택을 받지 못함을 알림.
         }
         return 0;
     }
 
-    //todo 리팩토링 필수
-
-    /**
-     * 1. 상품명으로 검색 2. 프로모션 있는지 확인. 있다면 해당 프로모션 검색 후 프로모션 증정이 몇인지 확인 후 증정량을 구하고 프로모션 상품 재고에서 차감. 3. 프로모션 재고에서 차감하고 남은 양을
-     * 기본 재고에서 차감 4. 모두 기록 후 반환
-     *
-     * @param name
-     * @param quantity
-     * @return
-     */
     public PurchaseDTO purchase(String name, int quantity) {
         List<Item> items = itemRepository.findByName(name);
-        Item noPromotionItem = items.stream().filter(item -> item.getPromotion().isBlank()).findAny().get();
-        PurchaseDTOBuilder builder = PurchaseDTOBuilder.builder()
+        Item noPromotionItem = getNoPromotionItem(items);
+        PurchaseDTOBuilder builder = getPurchaseDataSet(name, quantity, items);
+
+        if (hasPromotion(name)) {
+            quantity = remainQuantityAfterCellPromotionItemFirst(quantity, items, builder);
+        }
+        noPromotionItem.cell(quantity);
+
+        return builder.build();
+    }
+
+    private int remainQuantityAfterCellPromotionItemFirst(int quantity, List<Item> items, PurchaseDTOBuilder builder) {
+        Item promotionItem = getPromotionItem(items);
+        Promotion promotion = getPromotionWithItem(promotionItem);
+        int min = Math.min(promotionItem.getQuantity(), quantity);
+        int freeQuantity = min / (promotion.getBuy() + promotion.getGet());
+        builder.freeQuantity(freeQuantity);
+        if (freeQuantity != 0) {
+            builder.promotion(true);
+        }
+        promotionItem.cell(min);
+        quantity -= min;
+        return quantity;
+    }
+
+    private Promotion getPromotionWithItem(Item promotionItem) {
+        return promotionRepository.findByName(promotionItem.getPromotion()).get();
+    }
+
+    private Item getNoPromotionItem(List<Item> items) {
+        return items.stream().filter(item -> item.getPromotion().isBlank()).findAny().get();
+    }
+
+    private Item getPromotionItem(List<Item> items) {
+        return items.stream()
+                .filter(item -> !item.getPromotion().isBlank())
+                .findAny().get();
+    }
+
+    private static PurchaseDTOBuilder getPurchaseDataSet(String name, int quantity, List<Item> items) {
+        return PurchaseDTOBuilder.builder()
                 .name(name)
                 .quantity(quantity)
                 .freeQuantity(0)
                 .price(items.stream().findAny().get().getPrice())
                 .promotion(false);
-
-        if (hasPromotion(name)) {
-            Item promotionItem = items.stream()
-                    .filter(item -> !item.getPromotion().isBlank())
-                    .findAny().get();
-            Promotion promotion = promotionRepository.findByName(promotionItem.getPromotion()).get();
-            int min = Math.min(promotionItem.getQuantity(), quantity);
-            int freeQuantity = min / (promotion.getBuy() + promotion.getGet());
-            builder.freeQuantity(freeQuantity);
-            if (freeQuantity != 0) {
-                builder.promotion(true);
-            }
-
-            promotionItem.cell(min);
-            quantity -= min;
-        }
-        noPromotionItem.cell(quantity);
-
-        return builder.build();
     }
 }
